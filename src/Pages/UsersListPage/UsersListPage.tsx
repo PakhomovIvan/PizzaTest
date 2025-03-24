@@ -1,8 +1,11 @@
-import { Column } from 'primereact/column'
+import { Button } from 'primereact/button'
+import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
 import { classNames } from 'primereact/utils'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { getUsers } from '../../Api/requests/getUsers'
 import { User } from '../../Common/Models/User'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
@@ -11,8 +14,10 @@ import { AppDispatch } from '../../Stores/store'
 import styles from './UsersListPage.module.scss'
 
 const UsersListPage = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const [usersList, setUsersList] = useState<User[] | null>(null)
+  const [userRole] = useState<string[]>(['Водитель', 'Официант', 'Повар'])
 
   useEffect(() => {
     document.title = 'Список пользователей'
@@ -40,27 +45,69 @@ const UsersListPage = () => {
     )
   }
 
+  const statusRowFilterTemplate = (
+    options: ColumnFilterElementTemplateOptions
+  ) => {
+    return (
+      <Dropdown
+        value={options.value}
+        options={userRole}
+        onChange={(e: DropdownChangeEvent) =>
+          options.filterApplyCallback(e.value)
+        }
+        placeholder="Выберите..."
+        className="p-column-filter"
+        showClear
+        style={{ minWidth: '12rem' }}
+      />
+    )
+  }
+
   return (
     <div className={styles.wrapper}>
-      <h1>Список пользователей</h1>
+      <div className={styles['users-list-header']}>
+        <h1>Список пользователей</h1>
+        {usersList && (
+          <Link to="./create">
+            <Button
+              label="Создать пользователя"
+              severity="contrast"
+              icon="pi pi-user-plus"
+              iconPos="right"
+            />
+          </Link>
+        )}
+      </div>
       {usersList && (
-        <DataTable
-          value={usersList}
-          emptyMessage="Список пользователей пуст"
-          stripedRows
-          scrollable
-          scrollHeight="600px"
-        >
-          <Column field="name" header="Имя"></Column>
-          <Column field="role" header="Должность"></Column>
-          <Column field="phone" header="Телефон"></Column>
-          <Column field="birthday" header="Дата рождения"></Column>
-          <Column
-            field="isArchive"
-            body={isArchiveUser}
-            header="Архив"
-          ></Column>
-        </DataTable>
+        <div className={styles['users-list-table']}>
+          <DataTable
+            value={usersList}
+            filterDisplay="row"
+            emptyMessage="Список пользователей пуст"
+            stripedRows
+            scrollable
+            scrollHeight="800px"
+            selectionMode="single"
+            onRowSelect={(e) => navigate(`./${e.data.id}/edit`)}
+          >
+            <Column field="name" header="Имя" sortable></Column>
+            <Column
+              field="role"
+              header="Должность"
+              filter
+              filterElement={statusRowFilterTemplate}
+              showFilterMenu={false}
+              showClearButton={false}
+            ></Column>
+            <Column field="phone" header="Телефон"></Column>
+            <Column field="birthday" header="Дата рождения" sortable></Column>
+            <Column
+              field="isArchive"
+              body={isArchiveUser}
+              header="В архиве"
+            ></Column>
+          </DataTable>
+        </div>
       )}
     </div>
   )

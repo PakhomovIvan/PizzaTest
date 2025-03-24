@@ -4,3 +4,14 @@
   align-items: center;
   gap: 20px;
 }
+
+.users-list-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.users-list-table {
+  height: auto;
+}
