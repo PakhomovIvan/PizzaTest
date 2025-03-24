@@ -1,4 +1,4 @@
-// import 'primeflex/primeflex.css'
+import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
 import 'primereact/resources/primereact.css'
 import 'primereact/resources/primereact.min.css'
