@@ -104,7 +104,7 @@ const UsersListPage = () => {
             <Column
               field="isArchive"
               body={isArchiveUser}
-              header="В архиве"
+              header="Архивный"
             ></Column>
           </DataTable>
         </div>

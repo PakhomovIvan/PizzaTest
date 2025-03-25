@@ -69,8 +69,6 @@ const UserCreationPage = () => {
     return errors[name] && <small>{errors[name].message}</small>
   }
 
-  const isArchive = watch('isArchive')
-
   return (
     <>
       <h1>Создание пользователя</h1>
@@ -133,6 +131,7 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
+          {getFormErrorMessage('phone')}
         </div>
         <div className={styles['form-input']}>
           <Controller
@@ -157,6 +156,7 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
+          {getFormErrorMessage('birthday')}
         </div>
         <div className={styles['form-input']}>
           <Controller
@@ -185,6 +185,7 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
+          {getFormErrorMessage('role')}
         </div>
         <div className={styles['form-input']}>
           <Controller
@@ -195,11 +196,11 @@ const UserCreationPage = () => {
                 <InputSwitch
                   id={field.name}
                   {...field}
-                  checked={!isArchive}
-                  onChange={() => field.onChange(!isArchive)}
+                  checked={!field.value}
+                  onChange={() => field.onChange(!field.value)}
                 />
                 <label htmlFor={field.name}>
-                  {!isArchive ? 'Активный' : 'Архивный'}
+                  {!field.value ? 'Активный' : 'Архивный'}
                 </label>
               </div>
             )}
