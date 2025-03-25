@@ -2,7 +2,7 @@ import { Button } from 'primereact/button'
 import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
-import { classNames } from 'primereact/utils'
+import { Tag } from 'primereact/tag'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -37,11 +37,11 @@ const UsersListPage = () => {
 
   const isArchiveUser = (user: User) => {
     return (
-      <i
-        className={classNames('pi', {
-          'true-icon pi-check-circle': user.isArchive,
-        })}
-      ></i>
+      <Tag
+        value={user.isArchive ? 'Архивный' : 'Активный'}
+        severity={user.isArchive ? 'contrast' : 'success'}
+        // {user.isArchive ?  : 'success'}
+      ></Tag>
     )
   }
 
@@ -103,8 +103,8 @@ const UsersListPage = () => {
             <Column field="birthday" header="Дата рождения" sortable></Column>
             <Column
               field="isArchive"
+              header="Статус"
               body={isArchiveUser}
-              header="Архивный"
             ></Column>
           </DataTable>
         </div>
