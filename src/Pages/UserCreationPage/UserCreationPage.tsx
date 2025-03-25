@@ -2,6 +2,7 @@ import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputMask } from 'primereact/inputmask'
+import { InputSwitch } from 'primereact/inputswitch'
 import { InputText } from 'primereact/inputtext'
 import { SelectItem } from 'primereact/selectitem'
 import { useEffect, useState } from 'react'
@@ -33,6 +34,7 @@ const UserCreationPage = () => {
   const {
     control,
     setValue,
+    watch,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<UserCreation>({
@@ -43,7 +45,7 @@ const UserCreationPage = () => {
       phone: '',
       birthday: '',
     },
-    mode: 'onBlur',
+    mode: 'onTouched',
   })
 
   const onSubmit: SubmitHandler<UserCreation> = (data: UserCreation) => {
@@ -66,6 +68,8 @@ const UserCreationPage = () => {
   const getFormErrorMessage = (name: keyof UserCreation) => {
     return errors[name] && <small>{errors[name].message}</small>
   }
+
+  const isArchive = watch('isArchive')
 
   return (
     <>
@@ -129,7 +133,6 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
-          {getFormErrorMessage('name')}
         </div>
         <div className={styles['form-input']}>
           <Controller
@@ -154,7 +157,6 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
-          {getFormErrorMessage('name')}
         </div>
         <div className={styles['form-input']}>
           <Controller
@@ -183,7 +185,25 @@ const UserCreationPage = () => {
               </FloatLabel>
             )}
           />
-          {getFormErrorMessage('name')}
+        </div>
+        <div className={styles['form-input']}>
+          <Controller
+            control={control}
+            name="isArchive"
+            render={({ field }) => (
+              <div className={styles['isArchive-checkbox']}>
+                <InputSwitch
+                  id={field.name}
+                  {...field}
+                  checked={!isArchive}
+                  onChange={() => field.onChange(!isArchive)}
+                />
+                <label htmlFor={field.name}>
+                  {!isArchive ? 'Активный' : 'Архивный'}
+                </label>
+              </div>
+            )}
+          />
         </div>
         <div className={styles['action-form']}>
           <Link to="/users-list">
