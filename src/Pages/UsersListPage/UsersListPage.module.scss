@@ -14,4 +14,9 @@
 
 .users-list-table {
   height: auto;
+
+  .p-fluid {
+    display: flex;
+    justify-content: center;
+  }
 }

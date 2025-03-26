@@ -3,6 +3,10 @@ import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
 import { Tag } from 'primereact/tag'
+import {
+  TriStateCheckbox,
+  TriStateCheckboxChangeEvent,
+} from 'primereact/tristatecheckbox'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -20,6 +24,9 @@ const UsersListPage = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [usersList, setUsersList] = useState<User[] | null>(null)
   const [userRole] = useState<string[]>(['Водитель', 'Официант', 'Повар'])
+  const [isArchiveFilterValue, setIsArchiveFilterValue] = useState<
+    boolean | null | undefined
+  >(null)
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -42,9 +49,7 @@ const UsersListPage = () => {
     )
   }
 
-  const statusRowFilterTemplate = (
-    options: ColumnFilterElementTemplateOptions
-  ) => {
+  const roleRowFilter = (options: ColumnFilterElementTemplateOptions) => {
     return (
       <Dropdown
         value={options.value}
@@ -55,10 +60,22 @@ const UsersListPage = () => {
         placeholder="Выберите..."
         className="p-column-filter"
         showClear
-        style={{ minWidth: '12rem' }}
       />
     )
   }
+
+  const isArchiveRowFilter = () => {
+    const onChange = (e: TriStateCheckboxChangeEvent) => {
+      setIsArchiveFilterValue(e.value)
+    }
+    return <TriStateCheckbox value={isArchiveFilterValue} onChange={onChange} />
+  }
+
+  const filteredUsers = usersList
+    ? typeof isArchiveFilterValue === 'string'
+      ? usersList
+      : usersList.filter((user) => user.isArchive === !isArchiveFilterValue)
+    : null
 
   return (
     <div className={styles.wrapper}>
@@ -78,11 +95,12 @@ const UsersListPage = () => {
       {usersList && (
         <div className={styles['users-list-table']}>
           <DataTable
-            value={usersList}
+            value={filteredUsers ?? usersList}
             filterDisplay="row"
             emptyMessage="Список пользователей пуст"
             stripedRows
             scrollable
+            resizableColumns
             scrollHeight="800px"
             selectionMode="single"
             onRowSelect={(e) => navigate(`./${e.data.id}/edit`)}
@@ -92,7 +110,7 @@ const UsersListPage = () => {
               field="role"
               header="Должность"
               filter
-              filterElement={statusRowFilterTemplate}
+              filterElement={roleRowFilter}
               showFilterMenu={false}
               showClearButton={false}
             ></Column>
@@ -101,7 +119,13 @@ const UsersListPage = () => {
             <Column
               field="isArchive"
               header="Статус"
+              dataType="boolean"
               body={isArchiveUser}
+              showFilterMenu={false}
+              showClearButton={false}
+              filter
+              filterMatchMode="equals"
+              filterElement={isArchiveRowFilter}
             ></Column>
           </DataTable>
         </div>
