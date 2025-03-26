@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { getUsers } from '../../Api/requests/getUsers'
 import { User } from '../../Common/Models/User'
+import useWindowSize from '../../Shared/windowSize/WindowSize'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { setToast } from '../../Stores/slices/toastSlice'
 import { AppDispatch } from '../../Stores/store'
@@ -22,11 +23,17 @@ const UsersListPage = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+
   const [usersList, setUsersList] = useState<User[] | null>(null)
   const [userRole] = useState<string[]>(['Водитель', 'Официант', 'Повар'])
   const [isArchiveFilterValue, setIsArchiveFilterValue] = useState<
     boolean | string | null | undefined
   >('')
+
+  const windowWidth = useWindowSize()
+
+  const isMediumScreen = windowWidth < 768
+  const isSmallScreen = windowWidth < 420
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -60,6 +67,7 @@ const UsersListPage = () => {
         placeholder="Выберите..."
         className="p-column-filter"
         showClear
+        style={windowWidth > 420 ? { width: '150px' } : { width: '100px' }}
       />
     )
   }
@@ -84,10 +92,11 @@ const UsersListPage = () => {
         {usersList && (
           <Link to="./create">
             <Button
-              label="Создать пользователя"
+              title="Создать пользователя"
               severity="contrast"
               icon="pi pi-user-plus"
               iconPos="right"
+              size={isMediumScreen ? 'small' : undefined}
             />
           </Link>
         )}
@@ -100,8 +109,8 @@ const UsersListPage = () => {
             emptyMessage="Список пользователей пуст"
             stripedRows
             scrollable
-            resizableColumns
-            scrollHeight="800px"
+            scrollHeight="765px"
+            size={isMediumScreen ? 'small' : 'normal'}
             selectionMode="single"
             onRowSelect={(e) => navigate(`./${e.data.id}/edit`)}
           >
@@ -115,7 +124,12 @@ const UsersListPage = () => {
               showClearButton={false}
             ></Column>
             <Column field="phone" header="Телефон"></Column>
-            <Column field="birthday" header="Дата рождения" sortable></Column>
+            <Column
+              field="birthday"
+              header="Дата рождения"
+              hidden={isMediumScreen}
+              sortable
+            ></Column>
             <Column
               field="isArchive"
               header="Статус"
@@ -126,6 +140,7 @@ const UsersListPage = () => {
               filter
               filterMatchMode="equals"
               filterElement={isArchiveRowFilter}
+              hidden={isMediumScreen}
             ></Column>
           </DataTable>
         </div>

@@ -164,7 +164,7 @@ const UserForm = ({ onSubmit, isLoadingData, userData }: UserFormProps) => {
                 onChange={() => field.onChange(!field.value)}
               />
               <label htmlFor={field.name}>
-                {!field.value ? 'Активный' : 'Архивный'}
+                {!field.value ? 'Активный' : 'В архиве'}
               </label>
             </div>
           )}
