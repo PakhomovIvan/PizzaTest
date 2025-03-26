@@ -25,8 +25,8 @@ const UsersListPage = () => {
   const [usersList, setUsersList] = useState<User[] | null>(null)
   const [userRole] = useState<string[]>(['Водитель', 'Официант', 'Повар'])
   const [isArchiveFilterValue, setIsArchiveFilterValue] = useState<
-    boolean | null | undefined
-  >(null)
+    boolean | string | null | undefined
+  >('')
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -66,13 +66,13 @@ const UsersListPage = () => {
 
   const isArchiveRowFilter = () => {
     const onChange = (e: TriStateCheckboxChangeEvent) => {
-      setIsArchiveFilterValue(e.value)
+      if (e.value !== null) setIsArchiveFilterValue(e.value)
     }
     return <TriStateCheckbox value={isArchiveFilterValue} onChange={onChange} />
   }
 
   const filteredUsers = usersList
-    ? typeof isArchiveFilterValue === 'string'
+    ? isArchiveFilterValue === ''
       ? usersList
       : usersList.filter((user) => user.isArchive === !isArchiveFilterValue)
     : null
