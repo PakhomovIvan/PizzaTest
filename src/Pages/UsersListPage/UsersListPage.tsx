@@ -33,7 +33,6 @@ const UsersListPage = () => {
   const windowWidth = useWindowSize()
 
   const isMediumScreen = windowWidth < 768
-  const isSmallScreen = windowWidth < 420
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -67,7 +66,7 @@ const UsersListPage = () => {
         placeholder="Выберите..."
         className="p-column-filter"
         showClear
-        style={windowWidth > 420 ? { width: '150px' } : { width: '100px' }}
+        style={windowWidth > 420 ? { width: '140px' } : { width: '100px' }}
       />
     )
   }

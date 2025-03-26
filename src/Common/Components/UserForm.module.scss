@@ -26,30 +26,6 @@
     }
   }
 
-  .input-text {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .input-date {
-    display: flex;
-    gap: 20px;
-  }
-
-  button#submit {
-    width: 150px;
-  }
-
-  .preview-photo {
-    border-radius: 20px;
-    width: 150px;
-  }
-
-  i {
-    color: var(--text-color-secondary);
-  }
-
   small {
     color: var(--red-700);
   }
