@@ -5,7 +5,7 @@ import { InputMask } from 'primereact/inputmask'
 import { InputSwitch } from 'primereact/inputswitch'
 import { InputText } from 'primereact/inputtext'
 import { SelectItem } from 'primereact/selectitem'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
@@ -17,9 +17,7 @@ import { AppDispatch } from '../../Stores/store'
 import styles from './UserCreationPage.module.scss'
 
 const UserCreationPage = () => {
-  useEffect(() => {
-    document.title = 'Создание пользователя'
-  }, [])
+  document.title = 'Создание пользователя'
 
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -33,8 +31,6 @@ const UserCreationPage = () => {
 
   const {
     control,
-    setValue,
-    watch,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<UserCreation>({

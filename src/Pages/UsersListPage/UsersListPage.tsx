@@ -14,14 +14,12 @@ import { AppDispatch } from '../../Stores/store'
 import styles from './UsersListPage.module.scss'
 
 const UsersListPage = () => {
+  document.title = 'Список пользователей'
+
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const [usersList, setUsersList] = useState<User[] | null>(null)
   const [userRole] = useState<string[]>(['Водитель', 'Официант', 'Повар'])
-
-  useEffect(() => {
-    document.title = 'Список пользователей'
-  }, [])
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -40,7 +38,6 @@ const UsersListPage = () => {
       <Tag
         value={user.isArchive ? 'Архивный' : 'Активный'}
         severity={user.isArchive ? 'contrast' : 'success'}
-        // {user.isArchive ?  : 'success'}
       ></Tag>
     )
   }
