@@ -1,6 +1,7 @@
+import { format, parse } from 'date-fns'
 import { Button } from 'primereact/button'
 import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column'
-import { DataTable } from 'primereact/datatable'
+import { DataTable, DataTableSortEvent } from 'primereact/datatable'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
 import { Tag } from 'primereact/tag'
 import {
@@ -31,7 +32,6 @@ const UsersListPage = () => {
   >('')
 
   const windowWidth = useWindowSize()
-
   const isMediumScreen = windowWidth < 768
 
   useEffect(() => {
@@ -84,6 +84,32 @@ const UsersListPage = () => {
       : usersList.filter((user) => user.isArchive === !isArchiveFilterValue)
     : null
 
+  const formatDate = (value: string | Date) => {
+    const date =
+      typeof value === 'string' ? parse(value, 'dd.MM.yyyy', new Date()) : value
+    return format(date, 'dd.MM.yyyy')
+  }
+
+  const dateBodyTemplate = (rowData: User) => {
+    return formatDate(rowData.birthday)
+  }
+
+  const dateSortFunction = (sortingOptions: DataTableSortEvent) => {
+    const { data, order } = sortingOptions
+
+    return data.sort((user1: User, user2: User) => {
+      const dateA =
+        typeof user1.birthday === 'string'
+          ? parse(user1.birthday, 'dd.MM.yyyy', new Date())
+          : user1.birthday
+      const dateB =
+        typeof user2.birthday === 'string'
+          ? parse(user2.birthday, 'dd.MM.yyyy', new Date())
+          : user2.birthday
+      return order * (dateA.getTime() - dateB.getTime())
+    })
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles['users-list-header']}>
@@ -126,7 +152,10 @@ const UsersListPage = () => {
             <Column
               field="birthday"
               header="Дата рождения"
+              dataType="date"
+              body={dateBodyTemplate}
               hidden={isMediumScreen}
+              sortFunction={dateSortFunction}
               sortable
             ></Column>
             <Column
