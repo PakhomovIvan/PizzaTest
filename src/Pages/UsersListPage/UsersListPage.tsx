@@ -138,7 +138,7 @@ const UsersListPage = () => {
             emptyMessage="Список пользователей пуст"
             stripedRows
             scrollable
-            scrollHeight="765px"
+            scrollHeight="85vh"
             size={isMediumScreen ? 'small' : 'normal'}
             selectionMode="single"
             onRowSelect={(e) => navigate(`./${e.data.id}/edit`)}
