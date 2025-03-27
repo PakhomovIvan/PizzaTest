@@ -63,6 +63,7 @@ const UsersListPage = () => {
     return (
       <Dropdown
         value={options.value}
+        variant="filled"
         options={userRole}
         onChange={(e: DropdownChangeEvent) =>
           options.filterApplyCallback(e.value)
@@ -102,14 +103,9 @@ const UsersListPage = () => {
     const { data, order } = sortingOptions
 
     return data.sort((user1: User, user2: User) => {
-      const dateA =
-        typeof user1.birthday === 'string'
-          ? parse(user1.birthday, 'dd.MM.yyyy', new Date())
-          : user1.birthday
-      const dateB =
-        typeof user2.birthday === 'string'
-          ? parse(user2.birthday, 'dd.MM.yyyy', new Date())
-          : user2.birthday
+      const dateA = parse(user1.birthday, 'dd.MM.yyyy', new Date())
+      const dateB = parse(user2.birthday, 'dd.MM.yyyy', new Date())
+
       return (order as number) * (dateA.getTime() - dateB.getTime())
     })
   }
