@@ -1,7 +1,11 @@
 import { format, parse } from 'date-fns'
 import { Button } from 'primereact/button'
-import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column'
-import { DataTable, DataTableSortEvent } from 'primereact/datatable'
+import {
+  Column,
+  ColumnFilterElementTemplateOptions,
+  ColumnSortEvent,
+} from 'primereact/column'
+import { DataTable } from 'primereact/datatable'
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
 import { Tag } from 'primereact/tag'
 import {
@@ -94,7 +98,7 @@ const UsersListPage = () => {
     return formatDate(rowData.birthday)
   }
 
-  const dateSortFunction = (sortingOptions: DataTableSortEvent) => {
+  const dateSortFunction = (sortingOptions: ColumnSortEvent) => {
     const { data, order } = sortingOptions
 
     return data.sort((user1: User, user2: User) => {
@@ -106,7 +110,7 @@ const UsersListPage = () => {
         typeof user2.birthday === 'string'
           ? parse(user2.birthday, 'dd.MM.yyyy', new Date())
           : user2.birthday
-      return order * (dateA.getTime() - dateB.getTime())
+      return (order as number) * (dateA.getTime() - dateB.getTime())
     })
   }
 
