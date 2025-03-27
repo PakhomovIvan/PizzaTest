@@ -176,6 +176,7 @@ const UserForm = ({ onSubmit, isLoadingData, userData }: UserFormProps) => {
         </Link>
         <Button
           label={userData ? 'Сохранить' : 'Создать'}
+          type="submit"
           severity="contrast"
           disabled={!isValid}
           loading={isLoadingData}
