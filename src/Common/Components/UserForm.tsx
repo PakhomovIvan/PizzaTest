@@ -174,7 +174,6 @@ const UserForm = ({ onSubmit, isLoadingData, userData }: UserFormProps) => {
         <Link to="/users-list">
           <Button label="Назад" severity="contrast" />
         </Link>
-
         <Button
           label={userData ? 'Сохранить' : 'Создать'}
           severity="contrast"
