@@ -105,7 +105,6 @@ const UsersListPage = () => {
     return data.sort((user1: User, user2: User) => {
       const dateA = parse(user1.birthday, 'dd.MM.yyyy', new Date())
       const dateB = parse(user2.birthday, 'dd.MM.yyyy', new Date())
-
       return (order as number) * (dateA.getTime() - dateB.getTime())
     })
   }

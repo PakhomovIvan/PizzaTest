@@ -159,7 +159,6 @@ const UserForm = ({ onSubmit, isLoadingData, userData }: UserFormProps) => {
             <div className={styles['isArchive-checkbox']}>
               <InputSwitch
                 id={field.name}
-                {...field}
                 checked={!field.value}
                 onChange={() => field.onChange(!field.value)}
               />
